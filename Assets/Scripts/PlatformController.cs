@@ -57,14 +57,6 @@ public class PlatformController : MonoBehaviour
 		                             1 << LayerMask.NameToLayer ("Ground"));
 
 		grounded = (hitBack.distance < floorDistance|| hitFront.distance < floorDistance) && hitFront && hitBack;
-		if (hitBack)
-		{
-			Debug.Log (string.Format ("Back: {0}, {1}", hitBack.collider.name, hitBack.distance));
-		}
-		if (hitFront)
-		{
-			Debug.Log (string.Format ("Front: {0}, {1}", hitFront.collider.name, hitFront.distance));
-		}
 
 		if (Input.GetKeyDown (KeyCode.UpArrow) && grounded)
 		{
@@ -78,11 +70,11 @@ public class PlatformController : MonoBehaviour
 			transform.rotation = Quaternion.identity;
 		}
 	}
-
+	/*
 	void OnDrawGizmos ()
 	{
 		Gizmos.DrawRay (transform.position, rb2d.velocity * 2);
-	}
+	}*/
 
 	void FixedUpdate ()
 	{

@@ -6,58 +6,37 @@ using Random = UnityEngine.Random;
 
 public class LevelController : MonoBehaviour
 {
-
-	[Serializable]
-	public class Count
-	{
-		public int maximum = 3;
-		public int minimum = 1;
-
-		public Count (int min, int max)
-		{
-			minimum = min;
-			maximum = max;
-		}
-	}
-
-	public Count levelBorders;
-	public int levelHeight;
+	public float levelLeftBorder;
+	public float levelRightBorder;
+	public float levelHeight;
 	public GameObject kittenPrefab;
 	public Vector3 catSpawnPoint;
-	public Count kittenCount;
+	public int kittenCount;
 
 	private List<GameObject> kittens;
 	private Transform boardHolder;
 
 	private Vector3 getKittenSpawnPoint ()
 	{
-		float x = Random.Range (levelBorders.minimum, levelBorders.maximum);
 		float y = levelHeight + kittenPrefab.transform.localScale.y;
+		if (levelLeftBorder == levelRightBorder)
+			return new Vector3 (levelRightBorder, y, 0f);
+		float x = Random.Range (levelLeftBorder, levelRightBorder);
 		return new Vector3 (x, y, 0f);
 	}
 
 	private void SpawnKitten ()
 	{
-		Vector3 spawnPoint;
-		while (true)
-		{
-			spawnPoint = getKittenSpawnPoint ();
-			if (Mathf.Abs (spawnPoint.x) - Mathf.Abs (catSpawnPoint.x) > 5)
-			{
-				break;
-			}
-		}
-		GameObject kitten = Instantiate (kittenPrefab, spawnPoint, Quaternion.identity) as GameObject;
+		GameObject kitten = Instantiate (kittenPrefab, getKittenSpawnPoint (), Quaternion.identity) as GameObject;
 		kittens.Add (kitten);
 		kitten.transform.SetParent (boardHolder);
 	}
 
 	public void Setup ()
 	{
-		int nKittens = Random.Range (kittenCount.minimum, kittenCount.maximum);
 		kittens = new List<GameObject> ();
 
-		for (int i = 0; i < nKittens; i++)
+		for (int i = 0; i < kittenCount; i++)
 		{
 			SpawnKitten ();
 		}
