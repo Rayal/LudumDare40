@@ -15,6 +15,8 @@ public class PlatformController : MonoBehaviour
 	public float moveForce = 365f;
 	public float maxSpeed = 5f;
 	public float jumpForce = 300f;
+
+	public float floorDistance;
 	//	public Transform groundCheck;
 
 	private bool grounded = false;
@@ -54,7 +56,7 @@ public class PlatformController : MonoBehaviour
 		                             backEdgeDetection.transform.position - transform.position,
 		                             1 << LayerMask.NameToLayer ("Ground"));
 
-		grounded = (hitBack.distance < 0.5 || hitFront.distance < 0.5) && hitFront && hitBack;
+		grounded = (hitBack.distance < floorDistance|| hitFront.distance < floorDistance) && hitFront && hitBack;
 		if (hitBack)
 		{
 			Debug.Log (string.Format ("Back: {0}, {1}", hitBack.collider.name, hitBack.distance));
@@ -69,12 +71,12 @@ public class PlatformController : MonoBehaviour
 			Debug.Log (string.Format ("Jump, {0}", grounded));
 			jump = true;
 		}
-		//Quaternion rot = transform.rotation;
-		/*
+		Quaternion rot = transform.rotation;
+
 		if (transform.rotation != Quaternion.identity)
 		{
 			transform.rotation = Quaternion.identity;
-		}*/
+		}
 	}
 
 	void OnDrawGizmos ()
