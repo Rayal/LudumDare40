@@ -17,23 +17,22 @@ public class PlatformController : MonoBehaviour
 	private bool grounded = false;
 	//private Animator anim;
 	private Rigidbody2D rb2d;
+	private BoxCollider2D boxCollider;
 
 	// Use this for initialization
 	void Awake ()
 	{
 		//anim = GetComponent <Animator> ();
 		rb2d = GetComponent<Rigidbody2D> ();
+		boxCollider = groundCheck.GetComponent<BoxCollider2D> ();
 	}
 	
 	// Update is called once per frame
 	void Update ()
 	{
 		grounded = Physics2D.Linecast (transform.position, groundCheck.transform.position, 1 << LayerMask.NameToLayer ("Ground"));
-		if (Input.GetKeyDown (KeyCode.UpArrow))
-		{
-			Debug.Log ("Up");
-		}
-		if (Input.GetButtonDown ("Jump") && grounded)
+
+		if (Input.GetKeyDown (KeyCode.UpArrow) && grounded)
 		{
 			Debug.Log ("Jump");
 			jump = true;
