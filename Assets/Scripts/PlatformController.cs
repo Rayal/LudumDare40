@@ -25,6 +25,8 @@ public class PlatformController : MonoBehaviour
 	private RaycastHit2D hitBack;
 	private RaycastHit2D hitFront;
 
+	public Animator anim;
+
 	void Awake ()
 	{
 		// Initializing component variables.
@@ -83,7 +85,8 @@ public class PlatformController : MonoBehaviour
 	void FixedUpdate ()
 	{
 		float h = Input.GetAxis ("Horizontal");
-		//anim.SetFloat ("Speed", Mathf.Abs (h));
+		anim.SetBool ("IsWalking", h!=0 );
+
 
 		if (h * rb2d.velocity.x < maxSpeed)
 		{
