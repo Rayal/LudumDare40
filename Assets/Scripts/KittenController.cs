@@ -46,7 +46,7 @@ public class KittenController : MonoBehaviour
 		}
 		else
 		{
-			if (Time.fixedTime - idlingTimer > idleTime)
+			if (Time.fixedTime - idlingTimer > Random.Range (0, idleTime))
 			{
 				idlingTimer = Time.fixedTime;
 				h = Random.Range (-moveForce, moveForce);
