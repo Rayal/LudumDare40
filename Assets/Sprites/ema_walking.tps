@@ -202,18 +202,18 @@
                 <key>scale9Enabled</key>
                 <false/>
                 <key>scale9Borders</key>
-                <rect>8,6,16,12</rect>
+                <rect>7,5,15,11</rect>
                 <key>scale9Paddings</key>
-                <rect>8,6,16,12</rect>
+                <rect>7,5,15,11</rect>
                 <key>scale9FromFile</key>
                 <false/>
             </struct>
         </map>
         <key>fileList</key>
         <array>
+            <filename>ema_walking1.png</filename>
             <filename>ema_walking2.png</filename>
             <filename>ema_walking3.png</filename>
-            <filename>ema_walking1.png</filename>
         </array>
         <key>ignoreFileList</key>
         <array/>
