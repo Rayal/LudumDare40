@@ -27,12 +27,12 @@ public class PlatformController : MonoBehaviour
 	private RaycastHit2D hitBack;
 	private RaycastHit2D hitFront;
 
-	public Animator anim;
+	private Animator anim;
 
 	void Awake ()
 	{
 		// Initializing component variables.
-		//anim = GetComponent <Animator> ();
+		anim = GetComponent <Animator> ();
 		rb2d = GetComponent<Rigidbody2D> ();
 		//boxCollider = groundCheck.GetComponent<BoxCollider2D> ();
 		jumpAudio = GetComponent <AudioSource> ();
