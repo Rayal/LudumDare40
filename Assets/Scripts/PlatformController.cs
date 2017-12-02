@@ -17,33 +17,23 @@ public class PlatformController : MonoBehaviour
 	public float jumpForce = 300f;
 
 	public float floorDistance;
-	//	public Transform groundCheck;
 
 	private bool grounded = false;
 	private Rigidbody2D rb2d;
 	private AudioSource jumpAudio;
 
-	private Vector2 leftBorder, rightBorder;
 	private RaycastHit2D hitBack;
 	private RaycastHit2D hitFront;
 
-	public Animator anim;
+	private Animator anim;
 
 	void Awake ()
 	{
 		// Initializing component variables.
-		//anim = GetComponent <Animator> ();
+		anim = GetComponent <Animator> ();
 		rb2d = GetComponent<Rigidbody2D> ();
 		//boxCollider = groundCheck.GetComponent<BoxCollider2D> ();
 		jumpAudio = GetComponent <AudioSource> ();
-
-		// Initializing useful static variables.
-		Vector2 scale = transform.localScale / 2;
-		leftBorder = (Vector2)transform.position - scale;
-		scale.x = -scale.x;
-		rightBorder = (Vector2)transform.position - scale;
-		Debug.Log (string.Format ("{0}, {1}", leftBorder, rightBorder));
-		Debug.Log (scale);
 	}
 
 	// Update is called once per frame
@@ -55,8 +45,16 @@ public class PlatformController : MonoBehaviour
 		hitBack = Physics2D.Raycast (transform.position,
 		                             backEdgeDetection.transform.position - transform.position,
 		                             1 << LayerMask.NameToLayer ("Ground"));
-
-		grounded = (hitBack.distance < floorDistance|| hitFront.distance < floorDistance) && hitFront && hitBack;
+		
+		grounded = (hitBack.distance < floorDistance || hitFront.distance < floorDistance) && hitFront && hitBack;
+		if (hitBack)
+		{
+			Debug.Log (string.Format ("Back: {0}, {1}", hitBack.collider.name, hitBack.distance));
+		}
+		if (hitFront)
+		{
+			Debug.Log (string.Format ("Front: {0}, {1}", hitFront.collider.name, hitFront.distance));
+		}
 
 		if (Input.GetKeyDown (KeyCode.UpArrow) && grounded)
 		{
@@ -79,7 +77,7 @@ public class PlatformController : MonoBehaviour
 	void FixedUpdate ()
 	{
 		float h = Input.GetAxis ("Horizontal");
-		anim.SetBool ("IsWalking", h!=0 );
+		anim.SetBool ("IsWalking", h != 0);
 
 
 		if (h * rb2d.velocity.x < maxSpeed)
