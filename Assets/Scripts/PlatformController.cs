@@ -43,6 +43,8 @@ public class PlatformController : MonoBehaviour
 	{
 		//Debug.Log ("JUpdate");
 		float h = Input.GetAxis ("Horizontal");
+		if (h != 0.0f)
+			Debug.Log (h);
 		//anim.SetFloat ("Speed", Mathf.Abs (h));
 
 		if (h * rb2d.velocity.x < maxSpeed)
@@ -51,7 +53,7 @@ public class PlatformController : MonoBehaviour
 		}
 		if (Mathf.Abs (rb2d.velocity.x) > maxSpeed)
 		{
-			rb2d.velocity = new Vector2 (Mathf.Sin (rb2d.velocity.x) * maxSpeed, rb2d.velocity.y);
+			rb2d.velocity = new Vector2 (maxSpeed, rb2d.velocity.y);
 		}
 		if (h > 0 && !facingRight)
 		{
