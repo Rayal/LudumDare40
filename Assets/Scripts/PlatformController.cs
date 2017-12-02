@@ -9,18 +9,21 @@ public class PlatformController : MonoBehaviour
 	[HideInInspector] public bool facingRight = true;
 	[HideInInspector] public bool jump = false;
 
+	public GameObject frontEdgeDetection;
+	public GameObject backEdgeDetection;
+
 	public float moveForce = 365f;
 	public float maxSpeed = 5f;
-	public float jumpForce = 1000f;
+	public float jumpForce = 300f;
 	//	public Transform groundCheck;
 
 	private bool grounded = false;
-	//private Animator anim;
 	private Rigidbody2D rb2d;
-	//private BoxCollider2D boxCollider;
 	private AudioSource jumpAudio;
 
 	private Vector2 leftBorder, rightBorder;
+	private RaycastHit2D hitBack;
+	private RaycastHit2D hitFront;
 
 	void Awake ()
 	{
@@ -36,28 +39,40 @@ public class PlatformController : MonoBehaviour
 		scale.x = -scale.x;
 		rightBorder = (Vector2)transform.position - scale;
 		Debug.Log (string.Format ("{0}, {1}", leftBorder, rightBorder));
+		Debug.Log (scale);
 	}
 
 	// Update is called once per frame
 	void Update ()
 	{
-		Vector2 unit = Vector2.one;
-		RaycastHit2D hitLeft = Physics2D.Raycast (leftBorder, -unit, 1 << LayerMask.NameToLayer ("Ground"));
-		unit.x = -unit.x;
-		RaycastHit2D hitRight = Physics2D.Raycast (rightBorder, unit, 1 << LayerMask.NameToLayer ("Ground"));
-		grounded = hitLeft.distance < 0.1 || hitRight.distance < 0.1;
-		if (grounded)
+		hitFront = Physics2D.Raycast (transform.position,
+		                              frontEdgeDetection.transform.position - transform.position,
+		                              1 << LayerMask.NameToLayer ("Ground"));
+		hitBack = Physics2D.Raycast (transform.position,
+		                             backEdgeDetection.transform.position - transform.position,
+		                             1 << LayerMask.NameToLayer ("Ground"));
+
+		grounded = (hitBack.distance < 0.5 || hitFront.distance < 0.5) && hitFront && hitBack;
+		if (hitBack)
 		{
-			Debug.Log (string.Format ("{0}, {1}", hitLeft.collider, hitLeft.distance));
-			Debug.Log (string.Format ("{0}, {1}", hitRight.collider, hitRight.distance));
+			Debug.Log (string.Format ("Back: {0}, {1}", hitBack.collider.name, hitBack.distance));
 		}
-		//grounded = Physics2D.Linecast (transform.position, groundCheck.transform.position, 1 << LayerMask.NameToLayer ("Ground"));
+		if (hitFront)
+		{
+			Debug.Log (string.Format ("Front: {0}, {1}", hitFront.collider.name, hitFront.distance));
+		}
 
 		if (Input.GetKeyDown (KeyCode.UpArrow) && grounded)
 		{
-			Debug.Log ("Jump");
+			Debug.Log (string.Format ("Jump, {0}", grounded));
 			jump = true;
 		}
+		//Quaternion rot = transform.rotation;
+		/*
+		if (transform.rotation != Quaternion.identity)
+		{
+			transform.rotation = Quaternion.identity;
+		}*/
 	}
 
 	void OnDrawGizmos ()
@@ -67,10 +82,7 @@ public class PlatformController : MonoBehaviour
 
 	void FixedUpdate ()
 	{
-		//Debug.Log ("JUpdate");
 		float h = Input.GetAxis ("Horizontal");
-		if (h != 0.0f)
-			Debug.Log (h);
 		//anim.SetFloat ("Speed", Mathf.Abs (h));
 
 		if (h * rb2d.velocity.x < maxSpeed)
