@@ -8,23 +8,28 @@ public class KittenController : MonoBehaviour
 	[HideInInspector] public bool facingRight = true;
 
 	public GameObject frontEdgeDetection;
+	public GameObject backEdgeDetection;
 
 	public float moveForce = 120f;
 	public float maxSpeed = 3f;
 
 	public float floorDistance;
+	public float jumpDistance;
 	public float idleTime = 5;
+	public float getUpTime = 3;
 	private AudioSource meowAudio;
 	public static float fixedTime;
 
 
 	private bool grounded = false;
 	private Rigidbody2D rb2d;
+	private RaycastHit2D hitBack;
 	private RaycastHit2D hitFront;
 
 	private float h;
 	private float timeLastRotation;
-	private float onFloorTime = 0.0f;
+	private float onFloorTime = 0f;
+	private float wrongOrientationTime = 0f;
 
 	// Use this for initialization
 	void Start ()
@@ -37,23 +42,42 @@ public class KittenController : MonoBehaviour
 	// Update is called once per frame
 	void Update ()
 	{
-		
+		if (transform.rotation != Quaternion.identity)
+		{
+			if (wrongOrientationTime == 0f)
+			{
+				wrongOrientationTime = Time.fixedTime;
+			}
+			else
+			{
+				if (Time.fixedTime - wrongOrientationTime > getUpTime)
+				{
+					transform.rotation = Quaternion.identity;
+					wrongOrientationTime = 0f;
+				}
+			}
+		}
 	}
 
-	//void OnDrawGizmos(){
-		//Gizmos.color = grounded ? Color.green : Color.red;
-		//Gizmos.DrawCube (frontEdgeDetection.transform.position, Vector3.one);
-	//}
+	/*void OnDrawGizmos(){
+		Gizmos.color = grounded ? Color.green : Color.red;
+		Gizmos.DrawCube (frontEdgeDetection.transform.position, Vector3.one);
+	}*/
 
 	void FixedUpdate ()
 	{
 		hitFront = Physics2D.Raycast (frontEdgeDetection.transform.position,
 		                              Vector2.down,
-										1 << LayerMask.NameToLayer ("Ground"));
-		grounded = (hitFront != null) && (hitFront.distance < floorDistance);
-		if (!grounded)
+		                              1 << LayerMask.NameToLayer ("Ground"));
+		hitBack = Physics2D.Raycast (transform.position,
+		                             backEdgeDetection.transform.position - transform.position,
+		                             1 << LayerMask.NameToLayer ("Ground"));
+		
+		grounded = hitFront && hitBack && hitFront.distance < floorDistance && hitBack.distance < floorDistance;
+		bool jumpSafe = hitFront && hitFront.distance < jumpDistance;
+		if (!jumpSafe)
 		{
-			//h = -h
+			h = -h;
 			timeLastRotation = Time.fixedTime;
 		}
 		else
@@ -82,14 +106,18 @@ public class KittenController : MonoBehaviour
 			Flip ();
 		}
 
-		if (grounded) {
+		if (grounded)
+		{
 			onFloorTime += Time.fixedDeltaTime;
-		} else {
+		}
+		else
+		{
 			onFloorTime = 0f;
 		}
 
-		if (onFloorTime > 3f) {
-			meowAudio.Play ();;
+		if (onFloorTime > 3f)
+		{
+			meowAudio.Play ();
 			transform.rotation = Quaternion.identity;
 		}
 	}
