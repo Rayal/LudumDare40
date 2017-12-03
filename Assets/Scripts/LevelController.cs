@@ -92,7 +92,7 @@ public class LevelController : MonoBehaviour
 		{
 			return;
 		}
-		if (boardHolder.transform.GetChild (0).tag == "Player")
+		if (kittenCount == cathouseController.caughtKittens)//boardHolder.transform.GetChild (0).tag == "Player")
 			EndLevel (true);
 		else if (Time.fixedTime - startTime > levelTime)
 				EndLevel (false);
