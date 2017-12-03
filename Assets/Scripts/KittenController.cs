@@ -14,6 +14,7 @@ public class KittenController : MonoBehaviour
 
 	public float floorDistance;
 	public float idleTime = 5;
+	private AudioSource meowAudio;
 	public static float fixedTime;
 
 
@@ -30,6 +31,7 @@ public class KittenController : MonoBehaviour
 	{
 		rb2d = GetComponent<Rigidbody2D> ();
 		timeLastRotation = Time.fixedTime;
+		meowAudio = GetComponent <AudioSource> ();
 	}
 	
 	// Update is called once per frame
@@ -51,7 +53,7 @@ public class KittenController : MonoBehaviour
 		grounded = (hitFront != null) && (hitFront.distance < floorDistance);
 		if (!grounded)
 		{
-			h = -h;
+			//h = -h
 			timeLastRotation = Time.fixedTime;
 		}
 		else
@@ -87,6 +89,7 @@ public class KittenController : MonoBehaviour
 		}
 
 		if (onFloorTime > 3f) {
+			meowAudio.Play ();;
 			transform.rotation = Quaternion.identity;
 		}
 	}
