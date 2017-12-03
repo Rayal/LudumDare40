@@ -14,18 +14,22 @@ public class KittenController : MonoBehaviour
 
 	public float floorDistance;
 	public float idleTime = 5;
+	public static float fixedTime;
+
 
 	private bool grounded = false;
 	private Rigidbody2D rb2d;
 	private RaycastHit2D hitFront;
 
 	private float h;
-	private float idlingTimer;
+	private float timeLastRotation;
+	private float onFloorTime = 0.0f;
+
 	// Use this for initialization
 	void Start ()
 	{
 		rb2d = GetComponent<Rigidbody2D> ();
-		idlingTimer = Time.fixedTime;
+		timeLastRotation = Time.fixedTime;
 	}
 	
 	// Update is called once per frame
@@ -34,21 +38,27 @@ public class KittenController : MonoBehaviour
 		
 	}
 
+	//void OnDrawGizmos(){
+		//Gizmos.color = grounded ? Color.green : Color.red;
+		//Gizmos.DrawCube (frontEdgeDetection.transform.position, Vector3.one);
+	//}
+
 	void FixedUpdate ()
 	{
 		hitFront = Physics2D.Raycast (frontEdgeDetection.transform.position,
 		                              Vector2.down,
-		                              1 << LayerMask.NameToLayer ("Ground"));
-		if (hitFront.distance > floorDistance)
+										1 << LayerMask.NameToLayer ("Ground"));
+		grounded = (hitFront != null) && (hitFront.distance < floorDistance);
+		if (!grounded)
 		{
 			h = -h;
-			idlingTimer = Time.fixedTime;
+			timeLastRotation = Time.fixedTime;
 		}
 		else
 		{
-			if (Time.fixedTime - idlingTimer > Random.Range (0, idleTime))
+			if (Time.fixedTime - timeLastRotation > Random.Range (0, idleTime))
 			{
-				idlingTimer = Time.fixedTime;
+				timeLastRotation = Time.fixedTime;
 				h = Random.Range (-moveForce, moveForce);
 			}
 		}
@@ -57,7 +67,7 @@ public class KittenController : MonoBehaviour
 		{
 			rb2d.AddForce (Vector2.right * h * moveForce);
 		}
-		if (Mathf.Abs (rb2d.velocity.x) > maxSpeed)
+		if (Mathf.Abs (rb2d.velocity.x) > maxSpeed) // limit maximum speed
 		{
 			rb2d.velocity = new Vector2 (Mathf.Clamp (rb2d.velocity.x, -maxSpeed, maxSpeed), rb2d.velocity.y);
 		}
@@ -68,6 +78,16 @@ public class KittenController : MonoBehaviour
 		if (h < 0 && facingRight)
 		{
 			Flip ();
+		}
+
+		if (grounded) {
+			onFloorTime += Time.fixedDeltaTime;
+		} else {
+			onFloorTime = 0f;
+		}
+
+		if (onFloorTime > 3f) {
+			transform.rotation = Quaternion.identity;
 		}
 	}
 

@@ -49,16 +49,16 @@ public class PlatformController : MonoBehaviour
 		grounded = (hitBack.distance < floorDistance || hitFront.distance < floorDistance) && hitFront && hitBack;
 		if (hitBack)
 		{
-			Debug.Log (string.Format ("Back: {0}, {1}", hitBack.collider.name, hitBack.distance));
+			// Debug.Log (string.Format ("Back: {0}, {1}", hitBack.collider.name, hitBack.distance));
 		}
 		if (hitFront)
 		{
-			Debug.Log (string.Format ("Front: {0}, {1}", hitFront.collider.name, hitFront.distance));
+			// Debug.Log (string.Format ("Front: {0}, {1}", hitFront.collider.name, hitFront.distance));
 		}
 
 		if (Input.GetKeyDown (KeyCode.UpArrow) && grounded)
 		{
-			Debug.Log (string.Format ("Jump, {0}", grounded));
+			// Debug.Log (string.Format ("Jump, {0}", grounded));
 			jump = true;
 		}
 		Quaternion rot = transform.rotation;
