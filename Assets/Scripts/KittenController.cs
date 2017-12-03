@@ -13,8 +13,8 @@ public class KittenController : MonoBehaviour
 	public float moveForce = 120f;
 	public float maxSpeed = 3f;
 
-	public float floorDistance;
-	public float jumpDistance;
+	public float floorDistance = 0.6f;
+	public float jumpDistance = 1;
 	public float idleTime = 5;
 	public float getUpTime = 3;
 	public float mewFrequency = 5;
