@@ -15,16 +15,22 @@ public class GrabController : MonoBehaviour
 	{
 		if (mouthFull == null)
 			return;
+		Debug.Log ("Catch Kitten");
 		mouthFull.GetComponent <KittenController> ().caught = true;
 		kittenParent = mouthFull.transform.parent;
 		mouthFull.transform.SetParent (transform);
+		mouthFull.GetComponent<SpriteRenderer> ().color = Color.cyan;
 	}
 
 	private void releaseKitten ()
 	{
+		if (kittenParent == null)
+			return;
+		Debug.Log ("Release Kitten");
 		mouthFull.transform.SetParent (kittenParent);
 		kittenParent = null;
 		mouthFull.GetComponent <KittenController> ().caught = false;
+		mouthFull.GetComponent<SpriteRenderer> ().color = Color.white;
 	}
 
 	void OnTriggerEnter2D (Collider2D other)
@@ -53,7 +59,7 @@ public class GrabController : MonoBehaviour
 	// Update is called once per frame
 	void FixedUpdate ()
 	{
-		if (Input.GetKeyDown (KeyCode.Space) && mouthFull != null)
+		if (Input.GetKeyDown (KeyCode.E) && mouthFull != null)
 		{
 			if (grabTime == 0f)
 			{

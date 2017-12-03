@@ -56,7 +56,7 @@ public class PlatformController : MonoBehaviour
 			// Debug.Log (string.Format ("Front: {0}, {1}", hitFront.collider.name, hitFront.distance));
 		}
 
-		if (Input.GetKeyDown (KeyCode.UpArrow) && grounded)
+		if ((Input.GetKeyDown (KeyCode.UpArrow) || Input.GetKeyDown (KeyCode.Space)) && grounded)
 		{
 			// Debug.Log (string.Format ("Jump, {0}", grounded));
 			jump = true;
