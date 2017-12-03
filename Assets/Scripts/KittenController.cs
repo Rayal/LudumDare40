@@ -13,8 +13,8 @@ public class KittenController : MonoBehaviour
 	public float moveForce = 120f;
 	public float maxSpeed = 3f;
 
-	public float floorDistance;
-	public float jumpDistance;
+	public float floorDistance = 0.6f;
+	public float jumpDistance = 1;
 	public float idleTime = 5;
 	public float getUpTime = 3;
 	public float mewFrequency = 5;
@@ -79,7 +79,11 @@ public class KittenController : MonoBehaviour
 		                             1 << LayerMask.NameToLayer ("Ground"));
 		
 		grounded = hitFront && hitBack && hitFront.distance < floorDistance && hitBack.distance < floorDistance;
-		bool jumpSafe = hitFront && hitFront.distance < jumpDistance;
+		/*if (hitFront)
+			Debug.Log (string.Format ("{0}, {1}", hitFront, hitFront.distance));
+		if (hitBack)
+			Debug.Log (string.Format ("{0}, {1}", hitBack, hitBack.distance));*/
+		bool jumpSafe = true;//hitFront && hitFront.distance < jumpDistance;
 		if (!jumpSafe)
 		{
 			h = -h;
