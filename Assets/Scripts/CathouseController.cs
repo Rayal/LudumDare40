@@ -12,7 +12,6 @@ public class CathouseController : MonoBehaviour
 		if (other.gameObject.tag == "Kitten")
 		{
 			caughtKittens++;
-			Debug.Log (string.Format ("Kitten Caught {0}", caughtKittens));
 			Destroy (other.gameObject);
 		}
 	}

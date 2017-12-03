@@ -98,8 +98,6 @@ public class PlatformController : MonoBehaviour
 		}
 		if (jump)
 		{
-			
-			Debug.Log ("Jumping");
 			jumpAudio.Play ();
 			//anim.SetTrigger ("Jump");
 			rb2d.AddForce (new Vector2 (0f, jumpForce));
