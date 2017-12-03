@@ -15,12 +15,15 @@ public class LevelController : MonoBehaviour
 	public Vector3 catSpawnPoint;
 	public int kittenCount;
 	public Text kittenText;
+	public Text timeText;
 	public GameObject cathouse;
 
+	private GameManager gameManager;
 	private List<GameObject> kittens;
 	private GameObject boardHolder;
 	private int startTime;
 	private int levelTime;
+	private CathouseController cathouseController;
 
 	private Vector3 getKittenSpawnPoint ()
 	{
@@ -46,6 +49,8 @@ public class LevelController : MonoBehaviour
 
 	public void Setup (int timeSeconds = 60, int kittens = 0)
 	{
+		cathouseController = cathouse.GetComponent <CathouseController> ();
+		this.gameManager = GetComponent <GameManager> ();
 		boardHolder = new GameObject ();
 		boardHolder.transform.SetParent (this.transform);
 		this.kittens = new List<GameObject> ();
@@ -60,18 +65,35 @@ public class LevelController : MonoBehaviour
 		levelTime = timeSeconds;
 	}
 
+	private void EndLevel ()
+	{
+		Destroy (boardHolder);
+		gameManager.LevelOver ();
+	}
+
 	void Update ()
 	{
-		CathouseController cathouseController = cathouse.GetComponent <CathouseController> ();
+		//if (cathouseController != null)
 		kittenText.text = string.Format ("Kittens\n{0}\n\nFound\n{1}", kittenCount, cathouseController.caughtKittens);
 	}
 
 	void FixedUpdate ()
 	{
+		if (boardHolder == null)
+		{
+			return;
+		}
 		if (boardHolder.transform.GetChild (0).tag == "Player" ||
 		    Time.fixedTime - startTime > levelTime)
 		{
-			Destroy (boardHolder);
+			EndLevel ();
 		}
+	}
+
+	void LateUpdate ()
+	{
+		int elapsedTime = (int)Time.fixedTime - startTime;
+		int timeLeft = levelTime - elapsedTime;
+		timeText.text = string.Format ("{0}:{1}", timeLeft / 60, timeLeft % 60);
 	}
 }
