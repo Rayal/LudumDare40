@@ -17,6 +17,7 @@ public class KittenController : MonoBehaviour
 	public float jumpDistance;
 	public float idleTime = 5;
 	public float getUpTime = 3;
+	public float mewFrequency = 5;
 	private AudioSource meowAudio;
 	public static float fixedTime;
 
@@ -56,6 +57,10 @@ public class KittenController : MonoBehaviour
 					wrongOrientationTime = 0f;
 				}
 			}
+		}
+		if (onFloorTime > Random.Range (mewFrequency - 1, mewFrequency + 1))
+		{
+			meowAudio.Play ();
 		}
 	}
 
@@ -113,12 +118,6 @@ public class KittenController : MonoBehaviour
 		else
 		{
 			onFloorTime = 0f;
-		}
-
-		if (onFloorTime > 3f)
-		{
-			meowAudio.Play ();
-			transform.rotation = Quaternion.identity;
 		}
 	}
 
