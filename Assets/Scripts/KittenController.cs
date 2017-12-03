@@ -6,6 +6,7 @@ using Random = UnityEngine.Random;
 public class KittenController : MonoBehaviour
 {
 	[HideInInspector] public bool facingRight = true;
+	[HideInInspector] public bool caught = false;
 
 	public GameObject frontEdgeDetection;
 	public GameObject backEdgeDetection;
@@ -71,6 +72,8 @@ public class KittenController : MonoBehaviour
 
 	void FixedUpdate ()
 	{
+		if (caught)
+			return;
 		hitFront = Physics2D.Raycast (frontEdgeDetection.transform.position,
 		                              Vector2.down,
 		                              1 << LayerMask.NameToLayer ("Ground"));

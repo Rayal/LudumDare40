@@ -15,12 +15,17 @@ public class LevelController : MonoBehaviour
 	public Vector3 catSpawnPoint;
 	public int kittenCount;
 	public Text kittenText;
+	public Text timeText;
 	public GameObject cathouse;
 
+	private GameManager gameManager;
 	private List<GameObject> kittens;
 	private GameObject boardHolder;
 	private int startTime;
 	private int levelTime;
+	private CathouseController cathouseController;
+
+	private bool setupDone = false;
 
 	private Vector3 getKittenSpawnPoint ()
 	{
@@ -46,6 +51,8 @@ public class LevelController : MonoBehaviour
 
 	public void Setup (int timeSeconds = 60, int kittens = 0)
 	{
+		cathouseController = cathouse.GetComponent <CathouseController> ();
+		this.gameManager = GetComponent <GameManager> ();
 		boardHolder = new GameObject ();
 		boardHolder.transform.SetParent (this.transform);
 		this.kittens = new List<GameObject> ();
@@ -58,20 +65,45 @@ public class LevelController : MonoBehaviour
 		SpawnPC ();
 		startTime = (int)Time.fixedTime;
 		levelTime = timeSeconds;
+		cathouseController.caughtKittens = 0;
+		setupDone = true;
+	}
+
+	private void EndLevel (bool playerWon)
+	{
+		Destroy (boardHolder);
+		gameManager.LevelOver ();
+		if (playerWon)
+			gameManager.WonLevel ();
+		else
+			gameManager.LostLevel ();
 	}
 
 	void Update ()
 	{
-		CathouseController cathouseController = cathouse.GetComponent <CathouseController> ();
-		kittenText.text = string.Format ("Kittens\n{0}\n\nFound\n{1}", kittenCount, cathouseController.caughtKittens);
+		if (!setupDone)
+			return;
+		kittenText.text = string.Format ("Kittens:{0}\nFound:{1}", kittenCount, cathouseController.caughtKittens);
 	}
 
 	void FixedUpdate ()
 	{
-		if (boardHolder.transform.GetChild (0).tag == "Player" ||
-		    Time.fixedTime - startTime > levelTime)
+		if (boardHolder == null || !setupDone)
 		{
-			Destroy (boardHolder);
+			return;
 		}
+		if (kittenCount == cathouseController.caughtKittens)//boardHolder.transform.GetChild (0).tag == "Player")
+			EndLevel (true);
+		else if (Time.fixedTime - startTime > levelTime)
+				EndLevel (false);
+	}
+
+	void LateUpdate ()
+	{
+		if (!setupDone)
+			return;
+		int elapsedTime = (int)Time.fixedTime - startTime;
+		int timeLeft = levelTime - elapsedTime;
+		timeText.text = string.Format ("{0}:{1}", timeLeft / 60, timeLeft % 60);
 	}
 }
