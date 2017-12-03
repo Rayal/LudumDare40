@@ -53,7 +53,7 @@ public class KittenController : MonoBehaviour
 		grounded = (hitFront != null) && (hitFront.distance < floorDistance);
 		if (!grounded)
 		{
-			//h = -h
+			h = -h;
 			timeLastRotation = Time.fixedTime;
 		}
 		else
@@ -89,7 +89,6 @@ public class KittenController : MonoBehaviour
 		}
 
 		if (onFloorTime > 3f) {
-			meowAudio.Play ();;
 			transform.rotation = Quaternion.identity;
 		}
 	}
