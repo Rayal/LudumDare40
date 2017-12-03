@@ -73,7 +73,9 @@ public class KittenController : MonoBehaviour
 	void FixedUpdate ()
 	{
 		if (caught)
+		{
 			return;
+		}
 		hitFront = Physics2D.Raycast (frontEdgeDetection.transform.position,
 		                              Vector2.down,
 		                              1 << LayerMask.NameToLayer ("Ground"));
