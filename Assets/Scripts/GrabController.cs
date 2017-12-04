@@ -75,4 +75,16 @@ public class GrabController : MonoBehaviour
 			grabTime = 0f;
 		}
 	}
+
+	void LateUpdate ()
+	{
+		if (mouthFull != null)
+		{
+			transform.Find ("E").gameObject.SetActive (true);
+		}
+		else
+		{
+			transform.Find ("E").gameObject.SetActive (false);
+		}
+	}
 }

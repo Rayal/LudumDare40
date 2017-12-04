@@ -10,7 +10,6 @@ public class BackButtonController : MonoBehaviour
 
 	void OnMouseUp ()
 	{
-		Debug.Log ("Click");
 		levelController.EndLevel (false);
 		arcadeController.EndLevel ();
 	}
