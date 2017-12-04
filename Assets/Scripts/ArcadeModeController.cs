@@ -28,6 +28,19 @@ public class ArcadeModeController : MonoBehaviour
 
 	private bool setupDone = false;
 
+	public void EndLevel ()
+	{
+		if (!setupDone)
+			return;
+		foreach (GameObject kitten in kittens)
+		{
+			Destroy (kitten);
+		}
+		gameManager.LevelOver ();
+		gameManager.EndArcade ();
+		setupDone = false;
+	}
+
 	private Vector3 getKittenSpawnPoint ()
 	{
 		float y = levelHeight + kittenPrefab.transform.localScale.y;
@@ -86,12 +99,7 @@ public class ArcadeModeController : MonoBehaviour
 			return;
 		if (kittens.Count > maxKittenCount)
 		{
-			foreach (GameObject kitten in kittens)
-			{
-				Destroy (kitten);
-			}
-			gameManager.LevelOver ();
-			gameManager.EndArcade ();
+			EndLevel ();
 		}
 	}
 

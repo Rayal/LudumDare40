@@ -6,7 +6,6 @@ using Random = UnityEngine.Random;
 public class KittenController : MonoBehaviour
 {
 	[HideInInspector] public bool facingRight = true;
-	[HideInInspector] public bool caught = false;
 
 	public GameObject frontEdgeDetection;
 	public GameObject backEdgeDetection;
@@ -32,6 +31,31 @@ public class KittenController : MonoBehaviour
 	private float timeLastRotation;
 	private float onFloorTime = 0f;
 	private float wrongOrientationTime = 0f;
+
+	private bool caught = false;
+	private GameObject caughtBy = null;
+	private Vector3 posDifference = Vector3.zero;
+
+	public void Catch (GameObject cat)
+	{
+		caught = true;
+		caughtBy = cat;
+		posDifference = cat.transform.position - transform.position;
+		GetComponent <SpriteRenderer> ().color = Color.cyan;
+	}
+
+	public void Release (GameObject cat)
+	{
+		caught = false;
+		caughtBy = null;
+		posDifference = Vector3.zero;
+		GetComponent <SpriteRenderer> ().color = Color.white;
+	}
+
+	public bool Caught ()
+	{
+		return caught;
+	}
 
 	// Use this for initialization
 	void Start ()
@@ -74,6 +98,7 @@ public class KittenController : MonoBehaviour
 	{
 		if (caught)
 		{
+			transform.position = caughtBy.transform.Find ("KittenPlace").position;
 			return;
 		}
 		hitFront = Physics2D.Raycast (frontEdgeDetection.transform.position,

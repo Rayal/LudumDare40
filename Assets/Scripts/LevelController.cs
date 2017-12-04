@@ -71,14 +71,17 @@ public class LevelController : MonoBehaviour
 		infoText.text = "Get all the kittens in the nest before the time runs out!";
 	}
 
-	private void EndLevel (bool playerWon)
+	public void EndLevel (bool playerWon)
 	{
+		if (!setupDone)
+			return;
 		Destroy (boardHolder);
 		gameManager.LevelOver ();
 		if (playerWon)
 			gameManager.WonLevel ();
 		else
 			gameManager.LostLevel ();
+		setupDone = false;
 	}
 
 	void Update ()
