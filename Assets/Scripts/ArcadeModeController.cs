@@ -77,7 +77,7 @@ public class ArcadeModeController : MonoBehaviour
 		if (!setupDone)
 			return;
 		kittenText.text = string.Format ("Kittens Found\n{0}", cathouseController.caughtKittens);
-		infoText.text = string.Format ("You will lose if there are more then {0} kittens on the level", maxKittenCount);
+		infoText.text = string.Format ("You will lose if there are more than {0} kittens on the level", maxKittenCount);
 	}
 
 	private void CheckEnd ()
