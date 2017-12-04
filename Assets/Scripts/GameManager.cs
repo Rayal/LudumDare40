@@ -15,6 +15,7 @@ public class GameManager : MonoBehaviour
 	;
 
 	private LevelController levelScript;
+	private ArcadeModeController arcadeScript;
 	private GameObject canvas;
 	private GameObject titleScreen;
 	private Text levelText;
@@ -33,6 +34,15 @@ public class GameManager : MonoBehaviour
 		titleScreen.SetActive (true);
 	}
 
+	public void StartArcade ()
+	{
+		levelStarted = true;
+		arcadeScript.Setup ();
+		titleScreen.SetActive (false);
+		canvas.SetActive (true);
+		levelText.text = "";
+	}
+
 	public void StartGame ()
 	{
 		levelStarted = true;
@@ -42,6 +52,13 @@ public class GameManager : MonoBehaviour
 		titleScreen.SetActive (false);
 		canvas.SetActive (true);
 		levelText.text = string.Format ("Level: {0}", gameLevel);
+	}
+
+	public void EndArcade ()
+	{
+		levelStarted = false;
+		gameChoice = GameChoice.New;
+		gameLevel = 1;
 	}
 
 	public void LostLevel ()
@@ -58,6 +75,34 @@ public class GameManager : MonoBehaviour
 		gameLevel++;
 	}
 
+	private void CreateTitleScreen ()
+	{
+		foreach (Transform child in titleScreen.transform)
+		{
+			child.gameObject.SetActive (false);
+		}
+		titleScreen.transform.Find ("PLAY").gameObject.SetActive (true);
+		titleScreen.transform.Find ("ARCADE").gameObject.SetActive (true);
+	}
+
+	private void CreateNextScreen ()
+	{
+		foreach (Transform child in titleScreen.transform)
+		{
+			child.gameObject.SetActive (false);
+		}
+		titleScreen.transform.Find ("NEXT").gameObject.SetActive (true);
+	}
+
+	private void CreateRetryScreen ()
+	{
+		foreach (Transform child in titleScreen.transform)
+		{
+			child.gameObject.SetActive (false);
+		}
+		titleScreen.transform.Find ("RETRY").gameObject.SetActive (true);
+	}
+
 	// Use this for initialization
 	void Awake ()
 	{
@@ -65,6 +110,7 @@ public class GameManager : MonoBehaviour
 		titleScreen = transform.Find ("TitleScreen").gameObject;
 		titleScreen.SetActive (true);
 		levelScript = GetComponent<LevelController> ();
+		arcadeScript = GetComponent <ArcadeModeController> ();
 		levelText = canvas.transform.Find ("LevelText").gameObject.GetComponent <Text> ();
 	}
 
@@ -74,12 +120,17 @@ public class GameManager : MonoBehaviour
 		{
 			return;
 		}
-		GameObject button = null;
 		titleScreen.SetActive (true);
-		if (gameChoice != GameChoice.Retry)
-			button = titleScreen.transform.Find ("PLAY").gameObject;
+		if (gameChoice == GameChoice.New)
+		{
+			CreateTitleScreen ();
+		}
 		else
-			button = titleScreen.transform.Find ("RETRY").gameObject;
-		button.SetActive (true);
+		{
+			if (gameChoice == GameChoice.Next)
+				CreateNextScreen ();
+			else
+				CreateRetryScreen ();
+		}
 	}
 }
