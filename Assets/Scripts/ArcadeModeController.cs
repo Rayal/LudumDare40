@@ -89,7 +89,7 @@ public class ArcadeModeController : MonoBehaviour
 	{
 		if (!setupDone)
 			return;
-		kittenText.text = string.Format ("Kittens Found\n{0}", cathouseController.caughtKittens);
+		kittenText.text = string.Format ("Kittens: {1}\nFound: {0}", cathouseController.caughtKittens, kittens.Count - 1);
 		infoText.text = string.Format ("You will lose if there are more than {0} kittens on the level", maxKittenCount);
 	}
 
@@ -97,6 +97,17 @@ public class ArcadeModeController : MonoBehaviour
 	{
 		if (!setupDone)
 			return;
+		Debug.Log (kittens.Count);
+		int i = 0;
+		while (i < kittens.Count)
+		{
+			if (kittens [i] == null)
+			{
+				kittens.RemoveAt (i);
+			}
+			else
+				i++;
+		}
 		if (kittens.Count > maxKittenCount)
 		{
 			EndLevel ();
