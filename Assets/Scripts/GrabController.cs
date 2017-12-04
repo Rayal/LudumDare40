@@ -9,28 +9,28 @@ public class GrabController : MonoBehaviour
 	private float grabTime = 0f;
 
 	private GameObject mouthFull = null;
-	private Transform kittenParent = null;
+	//private Transform kittenParent = null;
 
 	private void catchKitten ()
 	{
 		if (mouthFull == null)
 			return;
 		Debug.Log ("Catch Kitten");
-		mouthFull.GetComponent <KittenController> ().caught = true;
-		kittenParent = mouthFull.transform.parent;
-		mouthFull.transform.SetParent (transform);
-		mouthFull.GetComponent<SpriteRenderer> ().color = Color.cyan;
+		mouthFull.GetComponent <KittenController> ().Catch (gameObject);
+		//kittenParent = mouthFull.transform.parent;
+		//mouthFull.transform.SetParent (transform);
+		//mouthFull.GetComponent<SpriteRenderer> ().color = Color.cyan;
 	}
 
 	private void releaseKitten ()
 	{
-		if (kittenParent == null)
+		/*if (kittenParent == null)
 			return;
 		Debug.Log ("Release Kitten");
 		mouthFull.transform.SetParent (kittenParent);
-		kittenParent = null;
-		mouthFull.GetComponent <KittenController> ().caught = false;
-		mouthFull.GetComponent<SpriteRenderer> ().color = Color.white;
+		kittenParent = null;*/
+		mouthFull.GetComponent <KittenController> ().Release (gameObject);
+		//mouthFull.GetComponent<SpriteRenderer> ().color = Color.white;
 	}
 
 	void OnTriggerEnter2D (Collider2D other)
@@ -43,9 +43,17 @@ public class GrabController : MonoBehaviour
 
 	void OnTriggerExit2D (Collider2D other)
 	{
-		if (other.gameObject == mouthFull)
+		if (!other.CompareTag ("Kitten") || mouthFull == null)
+		{
+			return;
+		}
+		/*if (other.gameObject == mouthFull)
 		{
 			releaseKitten ();
+			mouthFull = null;
+		}*/
+		if (!mouthFull.GetComponent <KittenController> ().Caught ())
+		{
 			mouthFull = null;
 		}
 	}
