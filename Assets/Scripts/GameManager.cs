@@ -20,11 +20,13 @@ public class GameManager : MonoBehaviour
 	private GameObject titleScreen;
 	private Text levelText;
 
-	private bool gameStarted = false;
 	private bool levelStarted = false;
 	private int gameLevel = 1;
 	private float levelTime;
 	private int kittens;
+
+	//private Sprite wonScreen;
+	//private Sprite lostScreen;
 
 	private GameChoice gameChoice = GameChoice.New;
 
@@ -46,9 +48,9 @@ public class GameManager : MonoBehaviour
 	public void StartGame ()
 	{
 		levelStarted = true;
-		kittens = (int)Random.Range (gameLevel, (float)1.3 * gameLevel);
-		levelTime = Random.Range ((float)1.3 * gameLevel, (float)1.5 * gameLevel);
-		levelScript.Setup ((int)(levelTime * 60), kittens);
+		kittens = (int)Random.Range (gameLevel, (float)5 * gameLevel);
+		levelTime = Random.Range ((float)0.8 * kittens, (float)1.2 * kittens);
+		levelScript.Setup ((int)(levelTime * 30), kittens);
 		titleScreen.SetActive (false);
 		canvas.SetActive (true);
 		levelText.text = string.Format ("Level: {0}", gameLevel);
@@ -70,6 +72,7 @@ public class GameManager : MonoBehaviour
 
 	public void WonLevel ()
 	{
+		//titleScreen.GetComponent <SpriteRenderer>().sprite = ;
 		levelStarted = false;
 		gameChoice = GameChoice.Next;
 		gameLevel++;
@@ -83,6 +86,7 @@ public class GameManager : MonoBehaviour
 		}
 		titleScreen.transform.Find ("PLAY").gameObject.SetActive (true);
 		titleScreen.transform.Find ("ARCADE").gameObject.SetActive (true);
+		titleScreen.transform.Find ("EXIT").gameObject.SetActive (true);
 	}
 
 	private void CreateNextScreen ()
@@ -92,6 +96,7 @@ public class GameManager : MonoBehaviour
 			child.gameObject.SetActive (false);
 		}
 		titleScreen.transform.Find ("NEXT").gameObject.SetActive (true);
+		titleScreen.transform.Find ("EXIT").gameObject.SetActive (true);
 	}
 
 	private void CreateRetryScreen ()
@@ -101,6 +106,8 @@ public class GameManager : MonoBehaviour
 			child.gameObject.SetActive (false);
 		}
 		titleScreen.transform.Find ("RETRY").gameObject.SetActive (true);
+		titleScreen.transform.Find ("ARCADE").gameObject.SetActive (true);
+		titleScreen.transform.Find ("EXIT").gameObject.SetActive (true);
 	}
 
 	// Use this for initialization
@@ -112,6 +119,7 @@ public class GameManager : MonoBehaviour
 		levelScript = GetComponent<LevelController> ();
 		arcadeScript = GetComponent <ArcadeModeController> ();
 		levelText = canvas.transform.Find ("LevelText").gameObject.GetComponent <Text> ();
+		//wonScreen = Resources.Load ("Sprites/won_silt)
 	}
 
 	void LateUpdate ()

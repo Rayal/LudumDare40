@@ -16,6 +16,7 @@ public class LevelController : MonoBehaviour
 	public int kittenCount;
 	public Text kittenText;
 	public Text timeText;
+	public Text infoText;
 	public GameObject cathouse;
 
 	private GameManager gameManager;
@@ -67,6 +68,7 @@ public class LevelController : MonoBehaviour
 		levelTime = timeSeconds;
 		cathouseController.caughtKittens = 0;
 		setupDone = true;
+		infoText.text = "Get all the kittens in the nest before the time runs out!";
 	}
 
 	private void EndLevel (bool playerWon)
