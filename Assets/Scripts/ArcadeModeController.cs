@@ -14,6 +14,7 @@ public class ArcadeModeController : MonoBehaviour
 	public int kittenCount;
 	public Text kittenText;
 	public Text timeText;
+	public Text infoText;
 	public GameObject cathouse;
 	public int levelTime = 15;
 	public int maxKittenCount = 50;
@@ -76,6 +77,7 @@ public class ArcadeModeController : MonoBehaviour
 		if (!setupDone)
 			return;
 		kittenText.text = string.Format ("Kittens Found\n{0}", cathouseController.caughtKittens);
+		infoText.text = string.Format ("You will lose if there are more then {0} kittens on the level", maxKittenCount);
 	}
 
 	private void CheckEnd ()
@@ -101,6 +103,8 @@ public class ArcadeModeController : MonoBehaviour
 
 	void FixedUpdate ()
 	{
+		if (!setupDone)
+			return;
 		if (Time.fixedTime - lastSpawnTime > levelTime)
 		{
 			for (int i = 0; i < kittenCount; i++)
@@ -124,5 +128,11 @@ public class ArcadeModeController : MonoBehaviour
 			return;
 		int elapsedTime = (int)Time.fixedTime - startTime;
 		timeText.text = string.Format ("{0}:{1}", elapsedTime / 60, elapsedTime % 60);
+
+		if (Time.fixedTime - lastSpawnTime >= levelTime * 0.6)
+		{
+			int waveTime = levelTime - ((int)Time.fixedTime - lastSpawnTime);
+			infoText.text += string.Format ("\nNext wave in {0}s", waveTime);
+		}
 	}
 }
