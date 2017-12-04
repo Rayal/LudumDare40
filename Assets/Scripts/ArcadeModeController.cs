@@ -1,10 +1,10 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.UI;
 
 public class ArcadeModeController : MonoBehaviour
 {
-
 	public float levelLeftBorder;
 	public float levelRightBorder;
 	public float levelHeight;
