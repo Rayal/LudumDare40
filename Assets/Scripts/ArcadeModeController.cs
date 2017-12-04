@@ -15,13 +15,14 @@ public class ArcadeModeController : MonoBehaviour
 	public Text kittenText;
 	public Text timeText;
 	public GameObject cathouse;
+	public int levelTime = 15;
+	public int maxKittenCount = 50;
 
 	private GameManager gameManager;
 	private List<GameObject> kittens;
 	private GameObject boardHolder;
 	private int startTime;
 	private int lastSpawnTime;
-	private int levelTime = 15;
 	private CathouseController cathouseController;
 
 	private bool setupDone = false;
@@ -39,6 +40,7 @@ public class ArcadeModeController : MonoBehaviour
 	{
 		GameObject pc = Instantiate (pcPrefab, catSpawnPoint, Quaternion.identity) as GameObject;
 		pc.transform.SetParent (boardHolder.transform);
+		kittens.Add (pc);
 	}
 
 	private void SpawnKitten ()
@@ -73,7 +75,22 @@ public class ArcadeModeController : MonoBehaviour
 	{
 		if (!setupDone)
 			return;
-		kittenText.text = string.Format ("Kittens:{0}\nFound:{1}", kittenCount, cathouseController.caughtKittens);
+		kittenText.text = string.Format ("Kittens Found\n{0}", cathouseController.caughtKittens);
+	}
+
+	private void CheckEnd ()
+	{
+		if (!setupDone)
+			return;
+		if (kittens.Count > maxKittenCount)
+		{
+			foreach (GameObject kitten in kittens)
+			{
+				Destroy (kitten);
+			}
+			gameManager.LevelOver ();
+			gameManager.EndArcade ();
+		}
 	}
 
 	// Use this for initialization
@@ -98,7 +115,7 @@ public class ArcadeModeController : MonoBehaviour
 	void Update ()
 	{
 		UpdateText ();
-
+		CheckEnd ();
 	}
 
 	void LateUpdate ()
