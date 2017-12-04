@@ -96,6 +96,7 @@ public class GameManager : MonoBehaviour
 			child.gameObject.SetActive (false);
 		}
 		titleScreen.transform.Find ("NEXT").gameObject.SetActive (true);
+		titleScreen.transform.Find ("ARCADE").gameObject.SetActive (true);
 		titleScreen.transform.Find ("EXIT").gameObject.SetActive (true);
 	}
 
