@@ -7,7 +7,6 @@ public class ExitButtonController : MonoBehaviour
 
 	void OnMouseUp ()
 	{
-		Debug.Log ("Click");
 		Application.Quit ();
 	}
 

@@ -76,7 +76,7 @@ public class PlatformController : MonoBehaviour
 
 	void FixedUpdate ()
 	{
-		float h = Input.GetAxis ("Horizontal");
+		float h = Input.GetAxisRaw ("Horizontal");
 		anim.SetBool ("IsWalking", h != 0);
 
 
